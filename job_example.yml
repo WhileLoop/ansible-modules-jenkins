@@ -1,0 +1,32 @@
+- name: jenkins
+  hosts: 127.0.0.1
+  connection: local
+
+# Create a job.
+  tasks:
+    - jenkins_job:
+        host: http://localhost:8080
+        state: present
+        template: job1.xml
+        name: foo
+
+# Create it again - no change.
+    - jenkins_job:
+        host: http://localhost:8080
+        state: present
+        template: job1.xml
+        name: foo
+
+# Modify the job.
+    - jenkins_job:
+        host: http://localhost:8080
+        state: present
+        template: job2.xml
+        name: foo
+
+# Delete the job.
+    - jenkins_job:
+        host: http://localhost:8080
+        state: absent
+        template: job2.xml
+        name: foo
