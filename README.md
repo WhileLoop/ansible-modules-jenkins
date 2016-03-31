@@ -1,25 +1,32 @@
-### Ansible Modules to Configure Jenkins
+## Intro
 
-Currently one module is implemented which uses the jenkinsapi python library to idempotently manage Jenkins jobs. See the playbook jobs_example.yaml for usage example.
+An ansible module which uses the jenkinsapi python library to idempotently manage Jenkins jobs. See the playbook jobs_example.yaml for usage example.
 
-###### Example output:
+## Getting Started
+
+Simply run 'vagrant up' to get started with a with Ubuntu VM with Jenkins and ansible installed. The provisioning script will execute the example playbook. Point your browser to http://localhost:8080 to access the Jenkins application.
+
+## Example Output:
 
 ```
 $ ansible-playbook job_example.yml
-PLAY [jenkins] ****************************************************************
+PLAY [jenkins jobs] ***********************************************************
 
-TASK: [jenkins_job ] **********************************************************
-changed: [127.0.0.1]
+TASK: [create job1] ***********************************************************
+changed: [localhost]
 
-TASK: [jenkins_job ] **********************************************************
-ok: [127.0.0.1]
+TASK: [check job1 idempotency] ************************************************
+ok: [localhost]
 
-TASK: [jenkins_job ] **********************************************************
-changed: [127.0.0.1]
+TASK: [modify job1] ***********************************************************
+changed: [localhost]
 
-TASK: [jenkins_job ] **********************************************************
-changed: [127.0.0.1]
+TASK: [delete job1] ***********************************************************
+changed: [localhost]
+
+TASK: [create job2] ***********************************************************
+changed: [localhost]
 
 PLAY RECAP ********************************************************************
-127.0.0.1                  : ok=4    changed=3    unreachable=0    failed=0
+localhost                  : ok=5    changed=4    unreachable=0    failed=0
 ```

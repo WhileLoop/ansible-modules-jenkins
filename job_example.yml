@@ -1,32 +1,37 @@
-- name: jenkins
-  hosts: 127.0.0.1
-  connection: local
+- name: jenkins jobs
+  hosts: jenkins
 
-# Create a job.
   tasks:
-    - jenkins_job:
+    - name: create job1
+      jenkins_job:
         host: http://localhost:8080
         state: present
-        template: job1.xml
-        name: foo
+        template: xml/job1.xml
+        name: job1
 
-# Create it again - no change.
-    - jenkins_job:
+    - name: check job1 idempotency
+      jenkins_job:
         host: http://localhost:8080
         state: present
-        template: job1.xml
-        name: foo
+        template: xml/job1.xml
+        name: job1
 
-# Modify the job.
-    - jenkins_job:
+    - name: modify job1
+      jenkins_job:
         host: http://localhost:8080
         state: present
-        template: job2.xml
-        name: foo
+        template: xml/job1-disabled.xml
+        name: job1
 
-# Delete the job.
-    - jenkins_job:
+    - name: delete job1
+      jenkins_job:
         host: http://localhost:8080
         state: absent
-        template: job2.xml
-        name: foo
+        name: job1
+
+    - name: create job2
+      jenkins_job:
+        host: http://localhost:8080
+        state: present
+        template: xml/job2.xml
+        name: job2

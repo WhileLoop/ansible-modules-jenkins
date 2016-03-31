@@ -24,9 +24,13 @@ except ImportError:
     print "failed=True msg='jenkinsapi required for this module'"
     sys.exit(1)
 
+# TODO: try catch here
+from formencode.doctest_xml_compare import xml_compare
+from lxml import etree
+
 def main():
 
-    # TODO: required etc
+    # TODO: specify requirements and check inputs.
     module=AnsibleModule(
         argument_spec=dict(
             host=dict(),
@@ -46,18 +50,20 @@ def main():
 
     # TODO: try catch here
     # TODO: how to handle paths?
-    txt = open(template)
-    job_config = txt.read()
-
+    if (template):
+        txt = open(template)
+        job_config = txt.read()
+        job_config_xml = etree.fromstring(job_config)
 
     # There are 4 possible outcomes: created, updated, deleted, nochange.
-
     if (state == 'present'):
         # If the desired state is present we must check if the job exists and then check if the job has changed.
         if (J.has_job(name)):
-            # The job exists so we must compare the XMLs for changes and update if they don't match. TODO: compare XML objects instead of strings.
+            # The job exists so we must compare the XMLs for changes and update if they don't match.
             current_conf = J[name].get_config()
-            if (current_conf == job_config):
+            current_conf = current_conf.encode('ascii','replace')
+            current_conf_xml = etree.fromstring(current_conf)
+            if (xml_compare(job_config_xml, current_conf_xml)):
                 module.exit_json(msg="job exists", changed=False)
             else:
                 J[name].update_config(job_config)
